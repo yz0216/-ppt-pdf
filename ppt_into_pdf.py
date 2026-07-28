@@ -2,32 +2,32 @@ import os
 import glob
 import comtypes.client
 
-# 讓使用者輸入來源與輸出資料夾
-folder_path = input("請輸入 PPT 資料夾路徑：").strip()
-output_folder = input("請輸入 PDF 輸出資料夾路徑：").strip()
+# Prompt user for source and output folder paths
+folder_path = input("Please enter the PPT folder path: ").strip()
+output_folder = input("Please enter the PDF output folder path: ").strip()
 
-# 如果輸出資料夾不存在就建立
+# Create output folder if it doesn't exist
 os.makedirs(output_folder, exist_ok=True)
 
-# 找出所有 ppt 或 pptx 檔案（同時支援大小寫）
+# Find all ppt or pptx files (case-insensitive)
 ppt_files = glob.glob(os.path.join(folder_path, "*.ppt")) \
-           + glob.glob(os.path.join(folder_path, "*.PPT")) \
-           + glob.glob(os.path.join(folder_path, "*.pptx")) \
-           + glob.glob(os.path.join(folder_path, "*.PPTX"))
+            + glob.glob(os.path.join(folder_path, "*.PPT")) \
+            + glob.glob(os.path.join(folder_path, "*.pptx")) \
+            + glob.glob(os.path.join(folder_path, "*.PPTX"))
 
-print("找到的檔案：", ppt_files)
+print("Files found:", ppt_files)
 
 powerpoint = comtypes.client.CreateObject("Powerpoint.Application")
 powerpoint.Visible = 1
 
 for ppt_file in ppt_files:
-    # PDF 檔案輸出路徑 → 使用者指定的 output_folder
+    # PDF output path -> user-specified output_folder
     base_name = os.path.basename(ppt_file)
     pdf_file = os.path.join(output_folder, base_name.replace(".pptx", ".pdf").replace(".PPTX", ".pdf").replace(".ppt", ".pdf").replace(".PPT", ".pdf"))
     presentation = powerpoint.Presentations.Open(ppt_file)
-    presentation.SaveAs(pdf_file, 32)  # 32 = PDF 格式
+    presentation.SaveAs(pdf_file, 32)  # 32 = PDF format
     presentation.Close()
-    print(f"已轉換：{ppt_file} → {pdf_file}")
+    print(f"Converted: {ppt_file} -> {pdf_file}")
 
 powerpoint.Quit()
-print("全部轉換完成！PDF 檔案都在：", output_folder)
+print("All conversions completed! PDF files are located at:", output_folder)
