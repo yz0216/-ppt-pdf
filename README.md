@@ -11,7 +11,7 @@
  安裝方式
 1. 安裝 [Python 3.10+](https://www.python.org/downloads/)
 2. 安裝必要套件：
-   ```bash
+   bash
    pip install comtypes  ```
 ## 注意事項 
 需要 Windows + 安裝 Microsoft PowerPoint
